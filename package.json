@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
-    "test": "jest"
+    "test": "jest --coverage=false",
+    "test:coverage": "jest --coverage=true"
   },
   "author": "",
   "license": "ISC",
