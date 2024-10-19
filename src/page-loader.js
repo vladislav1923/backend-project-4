@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { promises as fs } from 'fs';
+import path from 'path';
 
 const fetchFile = (url) => axios.get(url);
 
-const writeFile = (pathName, data) => fs.writeFile(pathName, data);
+const writeFile = async (pathName, data) => {
+  const dir = path.dirname(pathName);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(pathName, data, 'utf-8');
+};
 
 const getFileName = (url) => {
   const urlWithoutProtocol = url.replace(/^https?:\/\//, '');
