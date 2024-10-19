@@ -4,7 +4,8 @@
   "description": "[![Actions Status](https://github.com/vladislav1923/backend-project-4/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/vladislav1923/backend-project-4/actions)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +16,17 @@
   "dependencies": {
     "axios": "^1.7.7",
     "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.0.2",
+    "@eslint/js": "^9.1.1",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "globals": "^15.0.0",
+    "simple-git-hooks": "^2.11.1"
+  },
+  "simple-git-hooks": {
+    "pre-push": "make lint"
   }
 }
