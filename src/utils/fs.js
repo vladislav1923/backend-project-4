@@ -8,11 +8,9 @@ const writeFile = async (pathName, data) => {
   return data;
 };
 
-const writeImages = async (output, images) => {
-  const promises = images.map(({ newPath, data }) => writeFile(`${output}/${newPath}`, data));
+const writeAssets = async (output, assets) => {
+  const promises = assets.map(({ newPath, data }) => writeFile(`${output}/${newPath}`, data));
   await Promise.all(promises);
-
-  return images;
 };
 
-export { writeFile, writeImages };
+export { writeFile, writeAssets };

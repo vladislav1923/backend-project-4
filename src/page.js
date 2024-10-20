@@ -1,14 +1,20 @@
-import { fetchFile, fetchImages } from './utils/http.js';
-import { getImagesPaths, rewriteImagesPaths } from './utils/html.js';
+import { fetchFile, fetchImages, fetchTextAssets } from './utils/http.js';
+import {
+  getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
+} from './utils/html.js';
 import { generateNameByFileName, generateNameByUrl, getOrigin } from './utils/url.js';
-import { writeFile, writeImages } from './utils/fs.js';
+import { writeAssets, writeFile } from './utils/fs.js';
 
 class Page {
   url;
 
   html;
 
-  images;
+  assets = {
+    images: [],
+    links: [],
+    scripts: [],
+  };
 
   constructor(url) {
     this.url = url;
@@ -22,6 +28,7 @@ class Page {
 
   async fetch() {
     const origin = getOrigin(this.url);
+    const assetsDir = `${generateNameByUrl(this.url)}_files`;
 
     return fetchFile(this.url)
       .then((response) => {
@@ -31,17 +38,38 @@ class Page {
         return fetchImages(origin, imagesPaths);
       })
       .then((images) => {
-        const imagesDir = `${generateNameByUrl(this.url)}_files`;
-        this.images = images.map((image) => ({
+        this.assets.images = images.map((image) => ({
           ...image,
-          newPath: `${imagesDir}/${generateNameByFileName(`${origin}${image.path}`)}`,
+          newPath: `${assetsDir}/${generateNameByFileName(`${origin}${image.path}`)}`,
+        }));
+      })
+      .then(() => {
+        const linksPaths = getLinksPaths(this.html);
+
+        return fetchTextAssets(origin, linksPaths);
+      })
+      .then((links) => {
+        this.assets.links = links.map((link) => ({
+          ...link,
+          newPath: `${assetsDir}/${generateNameByFileName(`${origin}${link.path}`)}`,
+        }));
+      })
+      .then(() => {
+        const scriptsPaths = getScriptsPaths(this.html, origin);
+
+        return fetchTextAssets('', scriptsPaths);
+      })
+      .then((scripts) => {
+        this.assets.scripts = scripts.map((script) => ({
+          ...script,
+          newPath: `${assetsDir}/${generateNameByFileName(`${origin}${script.path}`)}`,
         }));
       });
   }
 
   async update() {
     return new Promise((resolve) => {
-      this.html = rewriteImagesPaths(this.html, this.images);
+      this.html = rewriteAssetsPaths(this.html, this.assets);
       resolve();
     });
   }
@@ -49,9 +77,10 @@ class Page {
   async white(output) {
     const fileName = `${generateNameByUrl(this.url)}.html`;
     const filePath = `${output}/${fileName}`;
+    const allAssets = Object.values(this.assets).flat();
 
     return writeFile(filePath, this.html)
-      .then(() => writeImages(output, this.images))
+      .then(() => writeAssets(output, allAssets))
       .then(() => filePath);
   }
 }

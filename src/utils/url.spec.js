@@ -1,5 +1,5 @@
 import {
-  generateNameByFileName, generateNameByUrl, getOrigin, getPaths,
+  generateNameByFileName, generateNameByUrl, getOrigin, filterAbsolutes, filterTheSameDomain,
 } from './url.js';
 
 describe('URL Utils', () => {
@@ -24,10 +24,21 @@ describe('URL Utils', () => {
     expect(received).toBe(expected);
   });
 
-  it('should get paths', () => {
-    const urls = ['https://ru.hexlet.io/courses', '/assets/professions/nodejs.png'];
-    const expected = ['/courses', '/assets/professions/nodejs.png'];
-    const received = getPaths(urls);
+  it('should filter absolutes', () => {
+    const urls = [
+      { href: '/assets/professions/nodejs.png', rel: 'stylesheet' },
+      { href: 'https://cdn2.hexlet.io/assets/menu.css', rel: 'stylesheet' },
+    ];
+    const expected = [{ href: '/assets/professions/nodejs.png', rel: 'stylesheet' }];
+    const received = filterAbsolutes(urls);
+    expect(received).toEqual(expected);
+  });
+
+  it('should filter the same domain', () => {
+    const urls = ['/assets/professions/nodejs.png', 'https://ru.hexlet.io/courses'];
+    const domain = 'https://ru.hexlet.io';
+    const expected = ['https://ru.hexlet.io/courses'];
+    const received = filterTheSameDomain(urls, domain);
     expect(received).toEqual(expected);
   });
 });

@@ -13,8 +13,10 @@ const generateNameByFileName = (fileName) => {
 
 const getOrigin = (url) => new URL(url).origin;
 
-const getPaths = (urls) => urls.map((url) => (url.startsWith('/') ? url : new URL(url).pathname));
+const filterAbsolutes = (urls) => urls.filter((url) => url.startsWith('/'));
+
+const filterTheSameDomain = (urls, domain) => urls.filter((url) => url.startsWith(domain));
 
 export {
-  generateNameByUrl, generateNameByFileName, getOrigin, getPaths,
+  generateNameByUrl, generateNameByFileName, getOrigin, filterAbsolutes, filterTheSameDomain,
 };

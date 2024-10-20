@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { writeFile, writeImages } from './fs.js';
+import { writeFile, writeAssets } from './fs.js';
 import { INITIAL_FILE_NAME, IMAGE_1_NAME, IMAGE_2_NAME } from '../../__tests__/constants.js';
 
 const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${INITIAL_FILE_NAME}`);
@@ -19,13 +19,13 @@ describe('File System Utils', () => {
     expect(newFile).toEqual(file);
   });
 
-  it('should write images', async () => {
+  it('should write assets', async () => {
     const image1 = await fs.readFile(TEST_IMAGE_1_PATH);
     const image2 = await fs.readFile(TEST_IMAGE_2_PATH);
     const newImage1Path = path.join(__dirname, '../../__tests__/tmp/fs/write/new-image1.png');
     const newImage2Path = path.join(__dirname, '../../__tests__/tmp/fs/write/new-image2.jpg');
 
-    await writeImages('', [
+    await writeAssets('', [
       { newPath: newImage1Path, data: image1 },
       { newPath: newImage2Path, data: image2 },
     ]);

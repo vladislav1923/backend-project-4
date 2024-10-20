@@ -9,4 +9,11 @@ const fetchImages = (origin, paths) => Promise
     path: paths[i],
   })));
 
-export { fetchFile, fetchImages };
+const fetchTextAssets = (origin, paths) => Promise
+  .all(paths.map((path) => axios.get(`${origin}${path}`)))
+  .then((responses) => responses.map(({ data }, i) => ({
+    data,
+    path: paths[i],
+  })));
+
+export { fetchFile, fetchImages, fetchTextAssets };
