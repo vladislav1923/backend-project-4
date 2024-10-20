@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { Command } from 'commander';
-import pageLoader from './page-loader.js';
+import Page from './page.js';
 
 const cli = new Command();
 
@@ -13,9 +13,15 @@ cli
 cli
   .arguments('<url>')
   .action((url, { output }) => {
-    pageLoader(url, output).then((fileName) => {
-      console.log(`open ${fileName}`);
-    });
+    const page = new Page(url);
+    page.load(output)
+      .then((filePath) => {
+        console.log(`open ${filePath}`);
+      })
+      .catch((error) => {
+        console.error(error);
+        process.exit();
+      });
   });
 
 cli.parse();

@@ -1,6 +1,5 @@
 export default {
   testEnvironment: 'node', // Use 'node' environment for Node.js testing
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.js$', // Regex pattern to locate test files
   transform: {
     '^.+\\.js$': 'babel-jest', // Use babel-jest for transforming JavaScript files
   },
