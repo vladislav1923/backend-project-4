@@ -11,6 +11,12 @@ const generateNameByFileName = (fileName) => {
   return `${generateNameByUrl(name)}.${extension}`;
 };
 
+const generateNameByLinkName = (origin, path) => {
+  const newPath = path.includes('.') ? `${origin}${path}` : `${origin}${path}.html`;
+
+  return generateNameByFileName(newPath);
+};
+
 const getOrigin = (url) => new URL(url).origin;
 
 const filterAbsolutes = (urls) => urls.filter((url) => url.startsWith('/'));
@@ -18,5 +24,10 @@ const filterAbsolutes = (urls) => urls.filter((url) => url.startsWith('/'));
 const filterTheSameDomain = (urls, domain) => urls.filter((url) => url.startsWith(domain));
 
 export {
-  generateNameByUrl, generateNameByFileName, getOrigin, filterAbsolutes, filterTheSameDomain,
+  generateNameByUrl,
+  generateNameByFileName,
+  getOrigin,
+  filterAbsolutes,
+  filterTheSameDomain,
+  generateNameByLinkName,
 };

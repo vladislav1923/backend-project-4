@@ -2,7 +2,9 @@ import { fetchFile, fetchImages, fetchTextAssets } from './utils/http.js';
 import {
   getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
 } from './utils/html.js';
-import { generateNameByFileName, generateNameByUrl, getOrigin } from './utils/url.js';
+import {
+  generateNameByFileName, generateNameByLinkName, generateNameByUrl, getOrigin,
+} from './utils/url.js';
 import { writeAssets, writeFile } from './utils/fs.js';
 
 class Page {
@@ -51,7 +53,7 @@ class Page {
       .then((links) => {
         this.assets.links = links.map((link) => ({
           ...link,
-          newPath: `${assetsDir}/${generateNameByFileName(`${origin}${link.path}`)}`,
+          newPath: `${assetsDir}/${generateNameByLinkName(origin, link.path)}`,
         }));
       })
       .then(() => {
@@ -62,7 +64,7 @@ class Page {
       .then((scripts) => {
         this.assets.scripts = scripts.map((script) => ({
           ...script,
-          newPath: `${assetsDir}/${generateNameByFileName(`${origin}${script.path}`)}`,
+          newPath: `${assetsDir}/${generateNameByFileName(script.path)}`,
         }));
       });
   }

@@ -1,5 +1,5 @@
 import {
-  generateNameByFileName, generateNameByUrl, getOrigin, filterAbsolutes, filterTheSameDomain,
+  generateNameByFileName, generateNameByUrl, getOrigin, filterAbsolutes, filterTheSameDomain, generateNameByLinkName,
 } from './url.js';
 
 describe('URL Utils', () => {
@@ -40,5 +40,13 @@ describe('URL Utils', () => {
     const expected = ['https://ru.hexlet.io/courses'];
     const received = filterTheSameDomain(urls, domain);
     expect(received).toEqual(expected);
+  });
+
+  it('should generate name by link name', () => {
+    const origin = 'https://ru.hexlet.io';
+    const path = '/courses';
+    const expected = 'ru-hexlet-io-courses.html';
+    const received = generateNameByLinkName(origin, path);
+    expect(received).toBe(expected);
   });
 });
