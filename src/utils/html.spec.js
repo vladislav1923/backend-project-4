@@ -1,9 +1,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { getImagesPaths, rewriteImagesPaths } from './html.js';
+import { INITIAL_FILE_NAME, ASSET_PATH, NEW_ASSET_PATH } from '../../__tests__/constants.js';
 
-const TEST_FILE_NAME = 'page-with-images.html';
-const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${TEST_FILE_NAME}`);
+const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${INITIAL_FILE_NAME}`);
 
 describe('HTML Utils', () => {
   it('should extract image paths from html', async () => {
@@ -18,8 +18,8 @@ describe('HTML Utils', () => {
   it('should replace image paths', async () => {
     const file = await fs.readFile(TEST_FILE_PATH, 'utf-8');
     const images = [{
-      path: '/assets/professions/nodejs.png',
-      newPath: 'ru-hexlet-io-courses_files/ru-hexlet-io-assets-professions-nodejs.png',
+      path: ASSET_PATH,
+      newPath: NEW_ASSET_PATH,
     }];
 
     const received = rewriteImagesPaths(file, images);

@@ -1,10 +1,11 @@
 export default {
-  testEnvironment: 'node', // Use 'node' environment for Node.js testing
+  testEnvironment: 'node',
+  testMatch: ['**/?(*.)+(spec).js'],
   transform: {
-    '^.+\\.js$': 'babel-jest', // Use babel-jest for transforming JavaScript files
+    '^.+\\.js$': 'babel-jest',
   },
-  moduleFileExtensions: ['js', 'json', 'node'], // Supported file extensions
-  coverageDirectory: 'coverage', // Directory for coverage reports
-  collectCoverage: true, // Enable coverage collection
-  collectCoverageFrom: ['**/*.js', '!**/node_modules/**'], // Specify files for coverage collection
+  moduleFileExtensions: ['js', 'json', 'node'],
+  coverageDirectory: 'coverage',
+  collectCoverage: true,
+  collectCoverageFrom: ['**/*.js', '!**/node_modules/**'],
 };

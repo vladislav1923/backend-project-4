@@ -1,0 +1,10 @@
+export const URL_ORIGIN = 'https://ru.hexlet.io';
+export const URL_PATH = '/courses';
+export const URL = `${URL_ORIGIN}${URL_PATH}`;
+export const ASSETS_PATH = '/assets';
+export const ASSET_PATH = '/assets/professions/nodejs.png';
+export const NEW_ASSET_PATH = 'ru-hexlet-io-courses_files/ru-hexlet-io-assets-professions-nodejs.png';
+export const IMAGE_1_NAME = 'image.png';
+export const IMAGE_2_NAME = 'image.jpg';
+export const INITIAL_FILE_NAME = 'initial-file.html';
+export const PROCESSED_FILE_NAME = 'processed-file.html';

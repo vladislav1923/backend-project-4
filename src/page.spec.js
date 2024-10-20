@@ -2,17 +2,15 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import nock from 'nock';
 import Page from './page.js';
+import {
+  INITIAL_FILE_NAME, PROCESSED_FILE_NAME,
+  ASSET_PATH, IMAGE_1_NAME, URL, URL_ORIGIN, URL_PATH,
+} from '../__tests__/constants.js';
 
-const TEST_URL_ORIGIN = 'https://ru.hexlet.io';
-const TEST_URL_PATH = '/courses';
-const TEST_ASSET_PATH = '/assets/professions/nodejs.png';
-const TEST_URL = `${TEST_URL_ORIGIN}${TEST_URL_PATH}`;
-const IMAGE_NAME = 'image.png';
-const IMAGE_PATH = path.join(__dirname, '../__tests__/__fixtures__', IMAGE_NAME);
+const IMAGE_PATH = path.join(__dirname, '../__tests__/__fixtures__', IMAGE_1_NAME);
 const TEMP_DIR = path.join(__dirname, '../__tests__/tmp');
-const INITIAL_FILE_NAME = 'page-with-images.html';
+
 const INITIAL_FILE_PATH = path.join(__dirname, `../__tests__/__fixtures__/${INITIAL_FILE_NAME}`);
-const PROCESSED_FILE_NAME = 'downloaded-page-with-images.html';
 const PROCESSED_FILE_PATH = path.join(__dirname, `../__tests__/__fixtures__/${PROCESSED_FILE_NAME}`);
 
 describe('Page', () => {
@@ -21,13 +19,13 @@ describe('Page', () => {
     const processedHtml = await fs.readFile(PROCESSED_FILE_PATH, 'utf-8');
     const expectedImage = await fs.readFile(IMAGE_PATH);
 
-    nock(TEST_URL_ORIGIN)
-      .get(TEST_URL_PATH)
+    nock(URL_ORIGIN)
+      .get(URL_PATH)
       .reply(200, expectedHtml)
-      .get(TEST_ASSET_PATH)
+      .get(ASSET_PATH)
       .reply(200, expectedImage);
 
-    await new Page(TEST_URL).load(TEMP_DIR);
+    await new Page(URL).load(TEMP_DIR);
     const downloadedHtml = await fs.readFile(`${TEMP_DIR}/ru-hexlet-io-courses.html`, 'utf-8');
 
     expect(downloadedHtml).toEqual(processedHtml);

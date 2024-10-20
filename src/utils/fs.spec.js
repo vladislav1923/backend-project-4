@@ -1,13 +1,11 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { writeFile, writeImages } from './fs.js';
+import { INITIAL_FILE_NAME, IMAGE_1_NAME, IMAGE_2_NAME } from '../../__tests__/constants.js';
 
-const TEST_FILE_NAME = 'page-with-images.html';
-const TEST_IMAGE_1_NAME = 'image.png';
-const TEST_IMAGE_2_NAME = 'image.jpg';
-const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${TEST_FILE_NAME}`);
-const TEST_IMAGE_1_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${TEST_IMAGE_1_NAME}`);
-const TEST_IMAGE_2_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${TEST_IMAGE_2_NAME}`);
+const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${INITIAL_FILE_NAME}`);
+const TEST_IMAGE_1_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${IMAGE_1_NAME}`);
+const TEST_IMAGE_2_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${IMAGE_2_NAME}`);
 
 describe('File System Utils', () => {
   it('should write a file', async () => {
