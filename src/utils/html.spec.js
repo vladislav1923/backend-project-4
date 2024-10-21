@@ -4,24 +4,21 @@ import {
   getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
 } from './html.js';
 import {
-  INITIAL_FILE_NAME,
-  IMAGE_PATH,
-  NEW_IMAGE_PATH,
-  URL_ORIGIN,
-  CSS_PATH,
-  NEW_CSS_PATH,
-  CANONICAL_PATH,
-  NEW_CANONICAL_PATH,
-  NEW_RUNTIME_SCRIPT_PATH, RUNTIME_SCRIPT_PATH,
+  MOCKED_PNG_FILE_PATH,
+  LOADED_PNG_FILE_PATH,
+  MOCKED_URL_ORIGIN,
+  MOCKED_STYLES_FILE_PATH,
+  LOADED_STYLES_FILE_PATH,
+  MOCKED_CANONICAL_HTML_FILE_PATH,
+  LOADED_CANONICAL_HTML_FILE_PATH,
+  LOADED_RUNTIME_SCRIPT_FILE_PATH, MOCKED_RUNTIME_SCRIPT_FILE_PATH, INITIAL_HTML_FILE_PATH,
 } from '../../__tests__/constants.js';
-
-const TEST_FILE_PATH = path.join(__dirname, `../../__tests__/__fixtures__/${INITIAL_FILE_NAME}`);
 
 describe('HTML Utils', () => {
   let file;
 
   beforeAll(async () => {
-    file = await fs.readFile(TEST_FILE_PATH, 'utf-8');
+    file = await fs.readFile(INITIAL_HTML_FILE_PATH, 'utf-8');
   });
 
   it('should extract image paths from html', async () => {
@@ -35,17 +32,17 @@ describe('HTML Utils', () => {
   it('should replace assets paths', async () => {
     const assets = {
       images: [{
-        path: IMAGE_PATH,
-        newPath: NEW_IMAGE_PATH,
+        path: MOCKED_PNG_FILE_PATH,
+        newPath: LOADED_PNG_FILE_PATH,
       }],
       links: [
-        { path: CSS_PATH, newPath: NEW_CSS_PATH },
-        { path: CANONICAL_PATH, newPath: NEW_CANONICAL_PATH },
+        { path: MOCKED_STYLES_FILE_PATH, newPath: LOADED_STYLES_FILE_PATH },
+        { path: MOCKED_CANONICAL_HTML_FILE_PATH, newPath: LOADED_CANONICAL_HTML_FILE_PATH },
       ],
       scripts: [
         {
-          path: `${URL_ORIGIN}${RUNTIME_SCRIPT_PATH}`,
-          newPath: NEW_RUNTIME_SCRIPT_PATH,
+          path: `${MOCKED_URL_ORIGIN}${MOCKED_RUNTIME_SCRIPT_FILE_PATH}`,
+          newPath: LOADED_RUNTIME_SCRIPT_FILE_PATH,
         },
       ],
     };
@@ -73,7 +70,7 @@ describe('HTML Utils', () => {
   it('should extract scripts paths from html', async () => {
     const expected = ['https://ru.hexlet.io/packs/js/runtime.js'];
 
-    const received = getScriptsPaths(file, URL_ORIGIN);
+    const received = getScriptsPaths(file, MOCKED_URL_ORIGIN);
 
     expect(received).toEqual(expected);
   });
