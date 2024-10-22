@@ -7,4 +7,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/178ff311820639cac323/test_coverage)](https://codeclimate.com/github/vladislav1923/backend-project-4/test_coverage)
 
 ### How it works:
-[![asciicast](https://asciinema.org/a/4Ka7ikdf5zo3IRjKbr3SVuPrI.svg)](https://asciinema.org/a/4Ka7ikdf5zo3IRjKbr3SVuPrI)
+[![asciicast](https://asciinema.org/a/d8HDPM9moeTyE2W2QvIENJ5yq.svg)](https://asciinema.org/a/d8HDPM9moeTyE2W2QvIENJ5yq)
