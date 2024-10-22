@@ -61,10 +61,7 @@ const tasks = new Listr([
   },
   {
     title: 'Saving the root HTML file to the file system',
-    task: (ctx) => {
-      const rootHTMLFileName = `${File.convertPathToFileName(ctx.url)}.html`;
-      return writeFile(path.join(ctx.output, rootHTMLFileName), ctx.rootHTML);
-    },
+    task: (ctx) => writeFile(path.join(ctx.output, ctx.rootHTMLFileName), ctx.rootHTML),
   },
   {
     title: 'Saving additional files to the file system',
@@ -82,13 +79,18 @@ const tasks = new Listr([
 ]);
 
 export default function loader(url, output) {
+  const rootHTMLFileName = `${File.convertPathToFileName(url)}.html`;
+
   return tasks.run({
     url,
     output,
     origin: new URL(url).origin,
     assetsDir: `${File.convertPathToFileName(url)}_files`,
+    rootHTMLFileName,
     rootHTML: null,
     images: [],
     assets: [],
+  }).then(() => {
+    console.log(`open ${path.join(output, rootHTMLFileName)}`);
   });
 }
