@@ -1,16 +1,18 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 
-const writeFile = async (pathName, data) => {
+const writeFile = async (pathName, data, extension = 'text') => {
+  let file = data;
+
+  if (extension === 'json') {
+    file = JSON.stringify(data);
+  }
+
   const dir = path.dirname(pathName);
   await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(pathName, data, 'utf-8');
-  return data;
+  await fs.writeFile(pathName, file);
+
+  return file;
 };
 
-const writeAssets = async (output, assets) => {
-  const promises = assets.map(({ newPath, data }) => writeFile(`${output}/${newPath}`, data));
-  await Promise.all(promises);
-};
-
-export { writeFile, writeAssets };
+export default writeFile;

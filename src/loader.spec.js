@@ -1,7 +1,5 @@
-import path from 'path';
 import { promises as fs } from 'fs';
 import nock from 'nock';
-import Page from './page.js';
 import {
   INITIAL_HTML_FILE_PATH,
   LOADED_HTML_FILE_PATH,
@@ -16,9 +14,10 @@ import {
   MOCKED_RUNTIME_SCRIPT_FILE_PATH,
   RUNTIME_SCRIPT_FILE_PATH, TEMP_DIR_PATH,
 } from '../__tests__/constants.js';
+import loader from './loader.js';
 
-describe('Page', () => {
-  it('should load page', async () => {
+describe('Loader', () => {
+  it('should load a page', async () => {
     const expectedHtml = await fs.readFile(INITIAL_HTML_FILE_PATH, 'utf-8');
     const processedHtml = await fs.readFile(LOADED_HTML_FILE_PATH, 'utf-8');
     const expectedImage = await fs.readFile(PNG_FILE_PATH);
@@ -37,7 +36,8 @@ describe('Page', () => {
       .get(MOCKED_RUNTIME_SCRIPT_FILE_PATH)
       .reply(200, expectedScript);
 
-    await new Page(MOCKED_FULL_URL).load(TEMP_DIR_PATH);
+    await loader(MOCKED_FULL_URL, TEMP_DIR_PATH);
+
     const downloadedHtml = await fs.readFile(`${TEMP_DIR_PATH}/ru-hexlet-io-courses.html`, 'utf-8');
 
     expect(downloadedHtml).toEqual(processedHtml);

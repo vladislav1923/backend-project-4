@@ -1,20 +1,25 @@
 import axios from 'axios';
 import 'axios-debug-log';
+import logger from './logger.js';
 
-const fetchFile = (url) => axios.get(url);
+const fetchFile = (url) => {
+  logger(`${url} - started fetching a text file`);
+  return axios.get(url)
+    .then((response) => {
+      logger(`${url} - the text file has been fetched successfully`);
+      return response;
+    });
+};
 
-const fetchImages = (origin, paths) => Promise
-  .all(paths.map((path) => axios.get(`${origin}${path}`, { responseType: 'arraybuffer' })))
-  .then((responses) => responses.map(({ data }, i) => ({
-    data,
-    path: paths[i],
-  })));
+const fetchImage = (url) => {
+  logger(`${url} - started fetching an image`);
+  return axios.get(url, { responseType: 'arraybuffer' })
+    .then((response) => {
+      logger(`${url} - the image has been fetched successfully`);
+      return response;
+    });
+};
 
-const fetchTextAssets = (origin, paths) => Promise
-  .all(paths.map((path) => axios.get(`${origin}${path}`)))
-  .then((responses) => responses.map(({ data }, i) => ({
-    data,
-    path: paths[i],
-  })));
-
-export { fetchFile, fetchImages, fetchTextAssets };
+export {
+  fetchFile, fetchImage,
+};

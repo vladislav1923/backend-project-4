@@ -1,18 +1,16 @@
 import { promises as fs } from 'fs';
-import path from 'path';
 import {
   getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
 } from './html.js';
 import {
   MOCKED_PNG_FILE_PATH,
-  LOADED_PNG_FILE_PATH,
   MOCKED_URL_ORIGIN,
   MOCKED_STYLES_FILE_PATH,
-  LOADED_STYLES_FILE_PATH,
   MOCKED_CANONICAL_HTML_FILE_PATH,
-  LOADED_CANONICAL_HTML_FILE_PATH,
-  LOADED_RUNTIME_SCRIPT_FILE_PATH, MOCKED_RUNTIME_SCRIPT_FILE_PATH, INITIAL_HTML_FILE_PATH,
+  MOCKED_RUNTIME_SCRIPT_FILE_PATH,
+  INITIAL_HTML_FILE_PATH,
 } from '../../__tests__/constants.js';
+import File from './file.js';
 
 describe('HTML Utils', () => {
   let file;
@@ -22,56 +20,41 @@ describe('HTML Utils', () => {
   });
 
   it('should extract image paths from html', async () => {
-    const expected = ['/assets/professions/nodejs.png'];
-
     const received = getImagesPaths(file);
 
-    expect(received).toEqual(expected);
+    expect(received[0].getPath()).toBe('/assets/professions/nodejs.png');
   });
 
   it('should replace assets paths', async () => {
-    const assets = {
-      images: [{
-        path: MOCKED_PNG_FILE_PATH,
-        newPath: LOADED_PNG_FILE_PATH,
-      }],
-      links: [
-        { path: MOCKED_STYLES_FILE_PATH, newPath: LOADED_STYLES_FILE_PATH },
-        { path: MOCKED_CANONICAL_HTML_FILE_PATH, newPath: LOADED_CANONICAL_HTML_FILE_PATH },
-      ],
-      scripts: [
-        {
-          path: `${MOCKED_URL_ORIGIN}${MOCKED_RUNTIME_SCRIPT_FILE_PATH}`,
-          newPath: LOADED_RUNTIME_SCRIPT_FILE_PATH,
-        },
-      ],
-    };
+    const images = [new File(MOCKED_PNG_FILE_PATH, 'image')];
+    const assets = [
+      new File(MOCKED_STYLES_FILE_PATH, 'stylesheet'),
+      new File(MOCKED_CANONICAL_HTML_FILE_PATH, 'canonical'),
+      new File(`${MOCKED_URL_ORIGIN}${MOCKED_RUNTIME_SCRIPT_FILE_PATH}`, 'script'),
+    ];
 
-    const received = rewriteAssetsPaths(file, assets);
+    const received = rewriteAssetsPaths(file, images, assets, MOCKED_URL_ORIGIN, '/assets');
 
-    expect(received.includes(assets.images[0].newPath)).toBe(true);
-    expect(received.includes(assets.images[0].path)).toBe(false);
-    expect(received.includes(assets.links[0].newPath)).toBe(true);
-    expect(received.includes(assets.links[0].path)).toBe(false);
-    expect(received.includes(assets.links[1].newPath)).toBe(true);
-    expect(received.includes(assets.links[1].path)).toBe(false);
-    expect(received.includes(assets.scripts[0].newPath)).toBe(true);
-    expect(received.includes(assets.scripts[0].path)).toBe(false);
+    expect(received.includes(images[0].getNewPath(MOCKED_URL_ORIGIN, '/assets'))).toBe(true);
+    expect(received.includes(images[0].getPath())).toBe(false);
+    expect(received.includes(assets[0].getNewPath(MOCKED_URL_ORIGIN, '/assets'))).toBe(true);
+    expect(received.includes(assets[0].getPath())).toBe(false);
+    expect(received.includes(assets[1].getNewPath(MOCKED_URL_ORIGIN, '/assets'))).toBe(true);
+    expect(received.includes(assets[1].getPath())).toBe(false);
+    expect(received.includes(assets[0].getNewPath(MOCKED_URL_ORIGIN, '/assets'))).toBe(true);
+    expect(received.includes(assets[0].getPath())).toBe(false);
   });
 
   it('should extract links paths from html', async () => {
-    const expected = ['/assets/application.css', '/courses'];
-
     const received = getLinksPaths(file);
 
-    expect(received).toEqual(expected);
+    expect(received[0].getPath()).toBe('/assets/application.css');
+    expect(received[1].getPath()).toBe('/courses');
   });
 
   it('should extract scripts paths from html', async () => {
-    const expected = ['https://ru.hexlet.io/packs/js/runtime.js'];
-
     const received = getScriptsPaths(file, MOCKED_URL_ORIGIN);
 
-    expect(received).toEqual(expected);
+    expect(received[0].getPath()).toBe('https://ru.hexlet.io/packs/js/runtime.js');
   });
 });

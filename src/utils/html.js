@@ -1,55 +1,52 @@
 import * as cheerio from 'cheerio';
-import { filterAbsolutes, filterTheSameDomain } from './url.js';
+import File from './file.js';
 
 const IMAGES_EXTENSIONS = ['jpg', 'jpeg', 'png'];
 
 const getImagesPaths = (file) => {
   const $ = cheerio.load(file);
 
-  const urls = $('img')
+  return $('img')
     .filter((index, image) => {
       const src = $(image).attr('src');
       return IMAGES_EXTENSIONS.some((ext) => src.endsWith(ext));
     })
-    .map((index, image) => $(image).attr('src')).get();
-
-  return filterAbsolutes(urls);
-};
-
-const rewriteAssetsPaths = (file, assets) => {
-  let newFile = file;
-
-  assets.images.forEach((image) => {
-    newFile = newFile.replace(image.path, image.newPath);
-  });
-
-  assets.links.forEach((link) => {
-    newFile = newFile.replace(link.path, link.newPath);
-  });
-
-  assets.scripts.forEach((script) => {
-    newFile = newFile.replace(script.path, script.newPath);
-  });
-
-  return newFile;
+    .map((index, image) => new File($(image).attr('src'), 'image'))
+    .get()
+    .filter((image) => File.isRelative(image.getPath()));
 };
 
 const getLinksPaths = (file) => {
   const $ = cheerio.load(file);
 
-  const urls = $('link')
-    .map((index, link) => $(link).attr('href')).get();
-
-  return filterAbsolutes(urls);
+  return $('link')
+    .map((index, link) => new File($(link).attr('href'), $(link).attr('rel')))
+    .get()
+    .filter((link) => File.isRelative(link.getPath()));
 };
 
 const getScriptsPaths = (file, domain) => {
   const $ = cheerio.load(file);
 
-  const urls = $('script')
-    .map((index, script) => $(script).attr('src')).get();
+  return $('script')
+    .filter((index, script) => !!$(script).attr('src'))
+    .map((index, script) => new File($(script).attr('src'), 'script'))
+    .get()
+    .filter((script) => File.isTheSameDomain(script.getPath(), domain));
+};
 
-  return filterTheSameDomain(urls, domain);
+const rewriteAssetsPaths = (file, images, assets, origin, assetsDir) => {
+  let newFile = file;
+
+  images.forEach((image) => {
+    newFile = newFile.replace(image.getPath(), image.getNewPath(origin, assetsDir));
+  });
+
+  assets.forEach((link) => {
+    newFile = newFile.replace(link.getPath(), link.getNewPath(origin, assetsDir));
+  });
+
+  return newFile;
 };
 
 export {
