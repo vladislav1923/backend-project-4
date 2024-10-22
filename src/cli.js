@@ -18,8 +18,8 @@ cli
       .then((filePath) => {
         console.log(`open ${filePath}`);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((e) => {
+        console.error('Something went wrong. \n', e);
         process.exit();
       });
   });

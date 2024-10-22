@@ -1,4 +1,5 @@
 import axios from 'axios';
+import 'axios-debug-log';
 
 const fetchFile = (url) => axios.get(url);
 

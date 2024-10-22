@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
-    "test": "jest --coverage=false",
+    "test": "DEBUG='page-loader, nock.*' jest --coverage=false",
     "test:coverage": "jest --coverage=true"
   },
   "author": "",
@@ -16,8 +16,10 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "axios-debug-log": "^1.0.0",
     "cheerio": "^1.0.0",
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "debug": "^4.3.7"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.8",

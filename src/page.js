@@ -1,11 +1,22 @@
-import { fetchFile, fetchImages, fetchTextAssets } from './utils/http.js';
 import {
-  getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
+  fetchFile,
+  fetchImages,
+  fetchTextAssets,
+} from './utils/http.js';
+import {
+  getImagesPaths,
+  getLinksPaths,
+  getScriptsPaths,
+  rewriteAssetsPaths,
 } from './utils/html.js';
 import {
-  generateNameByFileName, generateNameByLinkName, generateNameByUrl, getOrigin,
+  generateNameByFileName,
+  generateNameByLinkName,
+  generateNameByUrl,
+  getOrigin,
 } from './utils/url.js';
 import { writeAssets, writeFile } from './utils/fs.js';
+import logger from './utils/logger.js';
 
 class Page {
   url;
@@ -32,14 +43,18 @@ class Page {
     const origin = getOrigin(this.url);
     const assetsDir = `${generateNameByUrl(this.url)}_files`;
 
+    logger(`Started loading resources from ${this.url}`);
+
     return fetchFile(this.url)
       .then((response) => {
+        logger('HTML file has been loaded');
         this.html = response.data;
         const imagesPaths = getImagesPaths(this.html);
 
         return fetchImages(origin, imagesPaths);
       })
       .then((images) => {
+        logger('The images have been loaded');
         this.assets.images = images.map((image) => ({
           ...image,
           newPath: `${assetsDir}/${generateNameByFileName(`${origin}${image.path}`)}`,
@@ -51,6 +66,7 @@ class Page {
         return fetchTextAssets(origin, linksPaths);
       })
       .then((links) => {
+        logger('Additional resources from link tags have been loaded');
         this.assets.links = links.map((link) => ({
           ...link,
           newPath: `${assetsDir}/${generateNameByLinkName(origin, link.path)}`,
@@ -62,6 +78,7 @@ class Page {
         return fetchTextAssets('', scriptsPaths);
       })
       .then((scripts) => {
+        logger('Additional scripts have been loaded');
         this.assets.scripts = scripts.map((script) => ({
           ...script,
           newPath: `${assetsDir}/${generateNameByFileName(script.path)}`,
@@ -72,18 +89,22 @@ class Page {
   async update() {
     return new Promise((resolve) => {
       this.html = rewriteAssetsPaths(this.html, this.assets);
+      logger('Rewrote inner resources paths');
       resolve();
     });
   }
 
   async white(output) {
+    logger('Starting saving files in the file system');
     const fileName = `${generateNameByUrl(this.url)}.html`;
     const filePath = `${output}/${fileName}`;
     const allAssets = Object.values(this.assets).flat();
 
     return writeFile(filePath, this.html)
       .then(() => writeAssets(output, allAssets))
-      .then(() => filePath);
+      .then(() => {
+        logger(`open ${filePath}`);
+      });
   }
 }
 
