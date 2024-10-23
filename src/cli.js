@@ -13,11 +13,7 @@ cli
 cli
   .arguments('<url>')
   .action((url, { output }) => {
-    loader(url, output)
-      .catch((e) => {
-        console.error('Something went wrong. \n', e);
-        process.exit();
-      });
+    loader(url, output);
   });
 
 cli.parse();

@@ -42,4 +42,26 @@ describe('Loader', () => {
 
     expect(downloadedHtml).toEqual(processedHtml);
   });
+
+  it('should handle error during the root html file uploading', async () => {
+    nock(MOCKED_URL_ORIGIN)
+      .get(MOCKED_URL_PATH)
+      .reply(500, { error: 'Not Found' });
+
+    return expect(loader(MOCKED_FULL_URL, TEMP_DIR_PATH))
+      .rejects.toThrow('Failed to download the root HTML file: Request failed with status code 500');
+  });
+
+  it('should handle error during images uploading', async () => {
+    const expectedHtml = await fs.readFile(INITIAL_HTML_FILE_PATH, 'utf-8');
+
+    nock(MOCKED_URL_ORIGIN)
+      .get(MOCKED_URL_PATH)
+      .reply(200, expectedHtml)
+      .get(MOCKED_PNG_FILE_PATH)
+      .reply(404, { error: 'Not Found' });
+
+    return expect(loader(MOCKED_FULL_URL, TEMP_DIR_PATH))
+      .rejects.toThrow('Failed to download images: Request failed with status code 404');
+  });
 });

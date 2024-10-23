@@ -14,6 +14,8 @@ const tasks = new Listr([
     title: 'Uploading the root HTML file',
     task: (ctx) => fetchFile(ctx.url).then((response) => {
       ctx.rootHTML = response.data;
+    }).catch((error) => {
+      throw new Error(`Failed to download the root HTML file: ${error.message}`);
     }),
   },
   {
@@ -27,6 +29,8 @@ const tasks = new Listr([
           })),
       ).then(() => {
         ctx.images = images;
+      }).catch((error) => {
+        throw new Error(`Failed to download images: ${error.message}`);
       });
     },
   },
@@ -44,6 +48,8 @@ const tasks = new Listr([
           })),
       ).then(() => {
         ctx.assets = assets;
+      }).catch((error) => {
+        throw new Error(`Failed to download assets: ${error.message}`);
       });
     },
   },
@@ -61,7 +67,10 @@ const tasks = new Listr([
   },
   {
     title: 'Saving the root HTML file to the file system',
-    task: (ctx) => writeFile(path.join(ctx.output, ctx.rootHTMLFileName), ctx.rootHTML),
+    task: (ctx) => writeFile(path.join(ctx.output, ctx.rootHTMLFileName), ctx.rootHTML)
+      .catch((error) => {
+        throw new Error(`Failed to write the root HTML file to the file system: ${error.message}`);
+      }),
   },
   {
     title: 'Saving additional files to the file system',
@@ -73,7 +82,9 @@ const tasks = new Listr([
           const newPath = path.join(ctx.output, asset.getNewPath(ctx.origin, ctx.assetsDir));
           return writeFile(newPath, asset.getData(), asset.getExtension());
         }),
-      );
+      ).catch((error) => {
+        throw new Error(`Failed to write additional files to the file system: ${error.message}`);
+      });
     },
   },
 ]);
@@ -92,5 +103,8 @@ export default function loader(url, output) {
     assets: [],
   }).then(() => {
     console.log(`open ${path.join(output, rootHTMLFileName)}`);
+  }).catch((e) => {
+    console.error(e);
+    throw e;
   });
 }
