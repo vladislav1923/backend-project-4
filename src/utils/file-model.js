@@ -20,14 +20,6 @@ class FileModel {
     return path.replace(domain, '');
   }
 
-  path;
-
-  type; // image, script, link, canonical, .etc
-
-  data;
-
-  extension;
-
   constructor(path, type) {
     this.path = path;
     this.type = type;
