@@ -89,7 +89,7 @@ const tasks = new Listr([
   },
 ]);
 
-export default function loader(url, output = '/') {
+export default function loader(url, output = process.cwd()) {
   const rootHTMLFileName = `${File.convertPathToFileName(url)}.html`;
 
   return checkPathExists(output)
