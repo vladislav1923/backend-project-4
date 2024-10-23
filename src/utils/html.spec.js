@@ -10,7 +10,7 @@ import {
   MOCKED_RUNTIME_SCRIPT_FILE_PATH,
   INITIAL_HTML_FILE_PATH,
 } from '../../__tests__/constants.js';
-import File from './file.js';
+import File from './file-model.js';
 
 describe('HTML Utils', () => {
   let file;

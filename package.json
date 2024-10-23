@@ -15,22 +15,22 @@
     "page-loader": "bin/page-loader.js"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^3.0.2",
+    "@eslint/js": "^9.1.1",
     "axios": "^1.7.7",
     "axios-debug-log": "^1.0.0",
     "cheerio": "^1.0.0",
     "commander": "^12.1.0",
     "debug": "^4.3.7",
+    "eslint-plugin-import": "^2.29.1",
+    "globals": "^15.0.0",
     "listr": "^0.14.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.8",
-    "@eslint/eslintrc": "^3.0.2",
-    "@eslint/js": "^9.1.1",
     "babel-jest": "^29.7.0",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.29.1",
-    "globals": "^15.0.0",
     "jest": "^29.7.0",
     "nock": "^13.5.5",
     "simple-git-hooks": "^2.11.1"

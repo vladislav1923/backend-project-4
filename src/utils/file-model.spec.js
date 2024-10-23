@@ -1,4 +1,4 @@
-import File from './file.js';
+import File from './file-model.js';
 import { MOCKED_FULL_URL, MOCKED_URL_ORIGIN, MOCKED_URL_PATH } from '../../__tests__/constants.js';
 
 describe('File Class', () => {

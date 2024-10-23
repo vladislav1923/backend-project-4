@@ -7,7 +7,7 @@ import {
   getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
 } from './utils/html.js';
 import { writeFile, checkPathExists } from './utils/fs.js';
-import File from './utils/file.js';
+import File from './utils/file-model.js';
 
 const tasks = new Listr([
   {

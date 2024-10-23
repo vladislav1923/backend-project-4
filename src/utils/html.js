@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import File from './file.js';
+import File from './file-model.js';
 
 const IMAGES_EXTENSIONS = ['jpg', 'jpeg', 'png'];
 
