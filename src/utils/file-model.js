@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-class File {
+class FileModel {
   static convertPathToFileName(path) {
     const urlWithoutProtocol = path.replace(/^https?:\/\//, '');
     const urlWithoutSpecialChars = urlWithoutProtocol.replace(/\W/g, '-');
@@ -39,7 +39,7 @@ class File {
   }
 
   getURL(origin) {
-    if (File.isRelative(this.path)) {
+    if (FileModel.isRelative(this.path)) {
       return join(origin, this.path);
     }
 
@@ -58,18 +58,18 @@ class File {
     let processingPath = this.path;
 
     if (this.type === 'canonical') {
-      return join(assetsDir, `${File.convertPathToFileName(`${origin}${processingPath}`)}.html`);
+      return join(assetsDir, `${FileModel.convertPathToFileName(`${origin}${processingPath}`)}.html`);
     }
 
-    if (File.isTheSameDomain(processingPath, origin)) {
-      processingPath = File.removeDomain(processingPath, origin);
+    if (FileModel.isTheSameDomain(processingPath, origin)) {
+      processingPath = FileModel.removeDomain(processingPath, origin);
     }
 
     const fileNameArr = processingPath.split('.');
     const extension = fileNameArr[fileNameArr.length - 1];
     const name = fileNameArr.slice(0, -1).join('.');
 
-    return join(assetsDir, `${File.convertPathToFileName(`${origin}${name}`)}.${extension}`);
+    return join(assetsDir, `${FileModel.convertPathToFileName(`${origin}${name}`)}.${extension}`);
   }
 
   setData(data) {
@@ -77,4 +77,4 @@ class File {
   }
 }
 
-export default File;
+export default FileModel;
