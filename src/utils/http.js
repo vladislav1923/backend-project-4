@@ -4,10 +4,13 @@ import logger from './logger.js';
 
 const fetchFile = (url) => {
   logger(`${url} - started fetching a text file`);
-  return axios.get(url)
+  return axios.get(url, { responseType: 'arraybuffer' })
     .then((response) => {
       logger(`${url} - the text file has been fetched successfully`);
-      return response;
+      return {
+        ...response,
+        data: Buffer.from(response.data, 'binary').toString('utf-8'),
+      };
     });
 };
 
