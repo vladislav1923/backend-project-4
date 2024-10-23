@@ -15,9 +15,15 @@ const writeFile = async (pathName, data, extension = 'text') => {
   return file;
 };
 
-const checkPathExists = async (output) => fs.access(output)
-  .catch(() => {
-    throw new Error(`The output directory does not exist: ${output}`);
-  });
+const checkPathExists = async (output) => {
+  if (!output) {
+    return Promise.resolve();
+  }
+
+  return fs.access(output)
+    .catch(() => {
+      throw new Error(`The output directory does not exist: ${output}`);
+    });
+};
 
 export { writeFile, checkPathExists };
