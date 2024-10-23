@@ -12,7 +12,7 @@ import {
   MOCKED_CANONICAL_HTML_FILE_PATH,
   PNG_FILE_PATH,
   MOCKED_RUNTIME_SCRIPT_FILE_PATH,
-  RUNTIME_SCRIPT_FILE_PATH, TEMP_DIR_PATH,
+  RUNTIME_SCRIPT_FILE_PATH, TEMP_DIR_PATH, NOT_EXISTENT_PATH,
 } from '../__tests__/constants.js';
 import loader from './loader.js';
 
@@ -63,5 +63,12 @@ describe('Loader', () => {
 
     return expect(loader(MOCKED_FULL_URL, TEMP_DIR_PATH))
       .rejects.toThrow('Failed to download images: Request failed with status code 404');
+  });
+
+  it('should handle error if a path does not exist', async () => {
+    const expectedErrorMessage = `The output directory does not exist: ${NOT_EXISTENT_PATH}`;
+
+    return expect(loader(MOCKED_FULL_URL, NOT_EXISTENT_PATH))
+      .rejects.toThrow(expectedErrorMessage);
   });
 });

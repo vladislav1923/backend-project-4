@@ -15,4 +15,9 @@ const writeFile = async (pathName, data, extension = 'text') => {
   return file;
 };
 
-export default writeFile;
+const checkPathExists = async (output) => fs.access(output)
+  .catch(() => {
+    throw new Error(`The output directory does not exist: ${output}`);
+  });
+
+export { writeFile, checkPathExists };

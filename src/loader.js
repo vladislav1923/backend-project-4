@@ -6,7 +6,7 @@ import {
 import {
   getImagesPaths, getLinksPaths, getScriptsPaths, rewriteAssetsPaths,
 } from './utils/html.js';
-import writeFile from './utils/fs.js';
+import { writeFile, checkPathExists } from './utils/fs.js';
 import File from './utils/file.js';
 
 const tasks = new Listr([
@@ -92,19 +92,22 @@ const tasks = new Listr([
 export default function loader(url, output) {
   const rootHTMLFileName = `${File.convertPathToFileName(url)}.html`;
 
-  return tasks.run({
-    url,
-    output,
-    origin: new URL(url).origin,
-    assetsDir: `${File.convertPathToFileName(url)}_files`,
-    rootHTMLFileName,
-    rootHTML: null,
-    images: [],
-    assets: [],
-  }).then(() => {
-    console.log(`open ${path.join(output, rootHTMLFileName)}`);
-  }).catch((e) => {
-    console.error(e);
-    throw e;
-  });
+  return checkPathExists(output)
+    .then(() => tasks.run({
+      url,
+      output,
+      origin: new URL(url).origin,
+      assetsDir: `${File.convertPathToFileName(url)}_files`,
+      rootHTMLFileName,
+      rootHTML: null,
+      images: [],
+      assets: [],
+    }))
+    .then(() => {
+      console.log(`open ${path.join(output, rootHTMLFileName)}`);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }

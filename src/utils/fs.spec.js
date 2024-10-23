@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import writeFile from './fs.js';
+import { writeFile } from './fs.js';
 import { INITIAL_HTML_FILE_PATH } from '../../__tests__/constants.js';
 
 describe('File System Utils', () => {
